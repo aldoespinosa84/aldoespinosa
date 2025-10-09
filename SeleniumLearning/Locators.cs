@@ -13,12 +13,23 @@ namespace SeleniumLearning
 
         IWebDriver driver;
 
+
         [SetUp]
         public void StartBrowser()
         {
             new WebDriverManager.DriverManager().SetUpDriver(new ChromeConfig());
-
             driver = new ChromeDriver();
+
+            //Implicit wait we can declare globally, si ponemos un implicit wait de 5 segundos se aplicara en todo el programa
+            //vamos usar 5 segundos para esperar los elementos que aparezcan. driver.Manage().Timeouts en todos los metodos que
+            //uses el driver se aplicar el tiempo Implicit
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
+
+            //Explicit wait lo usas cuando un elemento espera mas del tiempo de lo normal y no puedes usar un implicit wait, por que
+            //hay elementos que no duran mucho tiempo y otros si por que si usas implicit todos tienen que esperar ese mismo tiempo y es
+            //mucho y consume mucho tiempo a la hora del test.
+
+
             driver.Manage().Window.Maximize();         
             driver.Url = "http://www.rahulshettyacademy.com/loginpagePractise/";     
         }
@@ -31,17 +42,37 @@ namespace SeleniumLearning
             driver.FindElement(By.Id("username")).Clear();
             driver.FindElement(By.Id("username")).SendKeys("rahulshettyacademy");
             driver.FindElement(By.Name("password")).SendKeys("123456");
-            driver.FindElement(By.XPath("//div[@class='form-group'][5]/label/span/input"));
+
+            //css selector .text-info span:nth-child(1) input se pone con espacions y se van por locator coloando desde el padre al hijo
+            //para accesarlo, nth-child es para colocar la posicion del elemnto si hay varios igual a diferencia del xpah que es con[].
+
+            //Checkbox del Aggre
+            driver.FindElement(By.CssSelector(".text-info span:nth-child(1) input")).Click();
+
+            //Click en el raddiobutton de user
+            driver.FindElement(By.CssSelector("#login form div:nth-child(4) div label:nth-child(2) span:nth-of-type(2)")).Click();
+
+            //Dialogo cuando le das al raddio de user
+            driver.FindElement(By.CssSelector("#okayBtn")).Click();
+
+            WebDriverWait wait1 = new WebDriverWait(driver, TimeSpan.FromSeconds(8));
+            wait1.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.
+                TextToBePresentInElementValue(driver.FindElement(By.CssSelector("#okayBtn")), "Okay"));
+
+            //xpath
+            //driver.FindElement(By.XPath("//div[@class='form-group'][5]/label/span/input")).Click();
+            //driver.FindElement(By.XPath("//div[@class='form-group'][3]/div/label[2]/span[2]"));
 
             //css selector & xpath
             //tagname [attribute='value']
             //driver.FindElement(By.CssSelector("input[value='Sign In']")).Click();
-
-            //tagnmae[@attribute='value']
             driver.FindElement(By.XPath("//input[@id='signInBtn']")).Click();
-            
+
             //agarando el mesnaje de error que arroja
-            Thread.Sleep(3000);
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(8));
+            wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.
+                TextToBePresentInElementValue(driver.FindElement(By.Id("signInBtn")), "Sign In"));
+
             String errorMsg = driver.FindElement(By.ClassName("alert-danger")).Text;
             TestContext.Progress.WriteLine(errorMsg);
 
