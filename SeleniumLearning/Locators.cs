@@ -31,7 +31,7 @@ namespace SeleniumLearning
             driver.FindElement(By.Id("username")).Clear();
             driver.FindElement(By.Id("username")).SendKeys("rahulshettyacademy");
             driver.FindElement(By.Name("password")).SendKeys("123456");
-           
+            driver.FindElement(By.XPath("//div[@class='form-group'][5]/label/span/input"));
 
             //css selector & xpath
             //tagname [attribute='value']
@@ -46,12 +46,16 @@ namespace SeleniumLearning
             TestContext.Progress.WriteLine(errorMsg);
 
             IWebElement link = driver.FindElement(By.LinkText("Free Access to InterviewQues/ResumeAssistance/Material"));
+
             //Va agarrar el atributo que se encuentra en el link en esta caso el href y lo validar si es lo que se espera
             String hreflink = link.GetAttribute("href");
             String expectedUrl = "https://rahulshettyacademy.com/documents-request";
+
             //Assert es una función o clase que se usa en pruebas unitarias (unit tests) para verificar que un valor, condición o resultado sea el esperado.
             Assert.AreEqual(expectedUrl, hreflink);
 
+            
+            
         }
 
         [TearDown]
