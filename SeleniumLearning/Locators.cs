@@ -39,8 +39,6 @@ namespace SeleniumLearning
         public void LocatorsIdentification()
         {
             driver.FindElement(By.Id("username")).SendKeys("rahulshettyacademy");
-            driver.FindElement(By.Id("username")).Clear();
-            driver.FindElement(By.Id("username")).SendKeys("rahulshettyacademy");
             driver.FindElement(By.Name("password")).SendKeys("123456");
 
             //css selector .text-info span:nth-child(1) input se pone con espacions y se van por locator coloando desde el padre al hijo
@@ -49,15 +47,11 @@ namespace SeleniumLearning
             //Checkbox del Aggre
             driver.FindElement(By.CssSelector(".text-info span:nth-child(1) input")).Click();
 
-            //Click en el raddiobutton de user
-            driver.FindElement(By.CssSelector("#login form div:nth-child(4) div label:nth-child(2) span:nth-of-type(2)")).Click();
+            IWebElement droppdown = driver.FindElement(By.CssSelector("select.form-control"));
+            SelectElement drop = new SelectElement(droppdown);
+            drop.SelectByText("Teacher");
 
-            //Dialogo cuando le das al raddio de user
-            driver.FindElement(By.CssSelector("#okayBtn")).Click();
 
-            WebDriverWait wait1 = new WebDriverWait(driver, TimeSpan.FromSeconds(8));
-            wait1.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.
-                TextToBePresentInElementValue(driver.FindElement(By.CssSelector("#okayBtn")), "Okay"));
 
             //xpath
             //driver.FindElement(By.XPath("//div[@class='form-group'][5]/label/span/input")).Click();
@@ -83,11 +77,11 @@ namespace SeleniumLearning
             String expectedUrl = "https://rahulshettyacademy.com/documents-request";
 
             //Assert es una función o clase que se usa en pruebas unitarias (unit tests) para verificar que un valor, condición o resultado sea el esperado.
-            Assert.AreEqual(expectedUrl, hreflink);
-
-            
+            Assert.AreEqual(expectedUrl, hreflink);            
             
         }
+
+   
 
         [TearDown]
         public void CloseBrowser()
