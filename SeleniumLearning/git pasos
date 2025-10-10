@@ -1,0 +1,9 @@
+pasos para git bash here
+
+git status
+
+git add .
+
+git commint -m "comentarios"
+
+git push
